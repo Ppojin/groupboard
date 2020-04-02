@@ -1,0 +1,2 @@
+db_localhost_on_mac = `docker.for.mac.localhost:3308`
+- 참조: [[Docker on Mac] container to host 연결하기](https://jinwooe.wordpress.com/2017/07/24/docker-on-mac-container-to-host-%EC%97%B0%EA%B2%B0%ED%95%98%EA%B8%B0/)

@@ -1,0 +1,41 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+
+  db:
+    image: mysql:5.7.29
+    # command: --default-authentication-plugin=mysql_native_password
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: groupboard
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 12345
+    volumes:
+    - "./data:/var/lib/mysql"
+    - "./groupboardDump.sql:/docker-entrypoint-initdb.d/groupboardDump.sql"
+    ports:
+    - "3308:3306"
+
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+
+# version: '3'
+# services:
+#   mysql-dev:
+#     image: mysql:5.5
+#     environment:
+#       MYSQL_ROOT_PASSWORD: 12345
+#       MYSQL_DATABASE: groupboard
+#       MYSQL_USER: root
+#       MYSQL_PASSWORD: 12345
+#     volumes:
+#       - "./data:/var/lib/mysql"
+#       - "./data/groupboard.sql:/docker-entrypoint-initdb.d/groupboard.sql"
+#     ports:
+#       - "3308:3306"
