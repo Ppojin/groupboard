@@ -13,6 +13,10 @@ repositories {
 }
 
 dependencies {
+
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+
     // https://mvnrepository.com/artifact/org.imgscalr/imgscalr-lib
     compile group: 'org.imgscalr', name: 'imgscalr-lib', version: '4.2'
 

@@ -1,4 +1,4 @@
-package com.ppojin.groupboard.persistence;
+package com.ppojin.groupboard.persistence.group;
 
 
 import com.ppojin.groupboard.domain.*;
@@ -9,19 +9,19 @@ import java.util.List;
 public interface GroupDAO {
     List<ArticleVO> listAllArticle(int userID, int groupID) throws Exception;
     int insertArticle(ArticleVO articleVO, HttpServletRequest request) throws Exception;
+    void removeArticle(int removeArticleID, int userID) throws Exception;
 
     List<ReplyVO> listAllReply(int articleID) throws Exception;
+
     void insertReply(ReplyVO replyVO) throws Exception;
-
     List<SubscribeVO> listAllSubscribe(SubscribeVO subscribeVO) throws Exception;
-    void insertSubscribe(SubscribeVO subscribeVO) throws Exception;
 
+    void insertSubscribe(SubscribeVO subscribeVO) throws Exception;
     ArticleVO voteArticle(ArticleVO articleVO, VoteDTO voteDTO) throws Exception;
+
     void insertVote(VoteDTO voteDTO) throws Exception;
 
     List<ScheduleVO> listAllSchedule(int groupID) throws Exception;
-
-    void removeArticle(int removeArticleID, int userID) throws Exception;
 
     List<ImageVO> listAllImage(int articleID) throws Exception;
 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<!DOCTYPE mapper
+				PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+				"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ppojin.groupboard.mappers.service.ScheduleMapper">
+<resultMap id="scheduleVOResultMap" type="com.ppojin.groupboard.domain.ScheduleVO">
+	<id     property="articleID"       column="articleID"/>
+	<result property="title"        column="schedule_subject"/>
+	<result property="start"    column="schedule_startDate"/>
+	<result property="end"    column="schedule_endDate"/>
+</resultMap>
+<select id="listAllSchedule" resultMap="scheduleVOResultMap" parameterType="int">
+		SELECT
+			articleID,
+			schedule_subject,
+			schedule_startDate,
+			schedule_endDate
+		FROM `article` WHERE `type` = 2 AND `groupID` = #{value}
+</select>
+</mapper>

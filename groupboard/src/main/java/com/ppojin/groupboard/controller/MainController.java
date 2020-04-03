@@ -1,6 +1,5 @@
 package com.ppojin.groupboard.controller;
 
-
 import com.ppojin.groupboard.domain.MainVO;
 import com.ppojin.groupboard.domain.SubscribeVO;
 import com.ppojin.groupboard.domain.UserVO;

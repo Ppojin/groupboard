@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ppojin.groupboard.mappers.service.LikeMapper">
+    <resultMap id="likeVOResultMap" type="com.ppojin.groupboard.domain.LikeVO">
+        <id     property="articleID"            column="articleID"/>
+        <result property="userID"              column="userID"/>
+    </resultMap>
+    <select id="likeVOList" resultMap="likeVOResultMap">
+        SELECT
+            a.`userName`,
+            a.`gravatar`,
+            b.`likeDate`
+        FROM
+            (SELECT * FROM `article_like` WHERE `articleID` = ${articleID}) b
+            left join
+            `user` a
+            on a.`userID` = b.`userID`
+--         SELECT * FROM `article_like` WHERE `articleID` = ${articleID} AND `userID` = ${userID};
+    </select>
+    <select id="likeConfirm" resultMap="likeVOResultMap">
+        SELECT * FROM `article_like` WHERE `articleID` = ${articleID} AND `userID` = ${userID};
+    </select>
+    <insert id="addLike">
+        INSERT INTO `article_like` (`articleID`, `userID`) VALUES (${articleID}, ${userID});
+    </insert>
+    <insert id="disLike">
+        DELETE FROM `article_like` WHERE `articleID` = ${articleID}, AND `userID` = ${userID};
+    </insert>
+</mapper>

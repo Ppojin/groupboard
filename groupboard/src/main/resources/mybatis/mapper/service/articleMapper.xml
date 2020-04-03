@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ppojin.groupboard.mappers.service.ArticleMapper">
+    <resultMap id="articleVOResultMap" type="com.ppojin.groupboard.domain.ArticleVO">
+        <id     property="articleID"            column="articleID"/>
+        <result property="groupID"              column="groupID"/>
+        <result property="articleUUID"          column="articleUUID"/>
+        <result property="userID"               column="userID"/>
+        <result property="articleContent"       column="articleContent"/>
+        <result property="articleUploadDate"    column="uploadDate"/>
+        <result property="articleUpdateDate"    column="updateDate"/>
+        <!-- 회원 -->
+        <result property="userName"             column="userName"/>
+        <result property="userGravatar"         column="gravatar"/>
+        <!-- 기능 -->
+        <result property="articleType"          column="type"/>
+        <!-- 투표 -->
+        <result property="voteMultiple"         column="vote_multiple"/>
+        <!-- 일정 -->
+        <result property="scheduleSubject"      column="schedule_subject"/>
+        <result property="schedulePlace"        column="schedule_place"/>
+        <result property="scheduleStartDate"    column="schedule_startDate"/>
+        <result property="scheduleEndDate"      column="schedule_endDate"/>
+
+    </resultMap>
+    <select id="listAllArticle" resultMap="articleVOResultMap">
+        SELECT*
+        FROM
+            `article` a
+             LEFT JOIN `user` b
+             ON a.userID = b.userID
+        WHERE groupID = #{groupID}
+        ORDER BY articleID DESC;
+    </select>
+    <select id="selectOneArticleID" resultType="int">
+        SELECT `articleID` FROM `article` WHERE `articleUUID` = #{articleUUID};
+    </select>
+    <insert id="insertArticle">
+        INSERT INTO `article`(`articleUUID`,`groupID`,`userID`,`articleContent`, `type`)
+        VALUES(#{articleUUID}, #{groupID}, #{userID}, #{articleContent}, #{articleType});
+    </insert>
+    <insert id="insertVote">
+        INSERT INTO `article`(`articleUUID`,`groupID`,`userID`,`articleContent`, `type`, `vote_multiple`, `vote_count`)
+        VALUES(#{articleUUID}, #{groupID}, #{userID}, #{articleContent}, #{articleType}, #{voteMultiple}, 0);
+    </insert>
+    <insert id="insertSchedule">
+        INSERT INTO `article`(
+            `articleUUID`, `groupID`, `userID`, `articleContent`, `type`,
+             `schedule_subject`,
+             `schedule_place`,
+             `schedule_startDate`,
+             `schedule_endDate`)
+        VALUES(
+            #{articleUUID}, #{groupID}, #{userID}, #{articleContent}, #{articleType},
+            #{scheduleSubject},
+            #{schedulePlace},
+            #{scheduleStartDate},
+            #{scheduleEndDate}
+        );
+    </insert>
+    <delete id="deleteArticle" parameterType="int">
+        DELETE FROM `article` WHERE `articleID` = ${articleID};
+        DELETE FROM `reply` WHERE `articleID` = ${articleID};
+        DELETE FROM `image` WHERE `articleID` = ${articleID};
+        DELETE FROM `image_reply` WHERE `articleID` = ${articleID};
+        DELETE FROM `schedule_attend` WHERE `articleID` = ${articleID};
+        DELETE FROM `vote_item` WHERE `articleID` = ${articleID};
+        DELETE FROM `vote_selected` WHERE `articleID` = ${articleID};
+        DELETE FROM `article_like` WHERE `articleID` = ${articleID};
+    </delete>
+    <select id="getUserIDFromArticle" resultType="int" parameterType="int">
+        SELECT `userID` FROM `article` WHERE `articleID` = ${articleID};
+    </select>
+</mapper>

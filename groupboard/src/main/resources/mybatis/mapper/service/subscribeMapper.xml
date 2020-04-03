@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ppojin.groupboard.mappers.service.SubscribeMapper">
+	<resultMap id="subscribeVOResultMap" type="com.ppojin.groupboard.domain.SubscribeVO">
+		<id     property="subscribeID"      column="subscribeID"/>
+		<result property="groupID"          column="groupID"/>
+		<result property="userID"           column="userID"/>
+		<result property="inviteCode"       column="inviteCode"/>
+		<result property="inviteDate"       column="inviteDate"/>
+		<result property="joinDate"         column="joinDate"/>
+		<result property="unsubscribeDate"  column="unsubscribeDate"/>
+
+		<result property="groupName"        column="groupName"/>
+		<result property="groupURL"         column="url"/>
+		<result property="userName"         column="userName"/>
+	</resultMap>
+	<select id="listAllSubscribe" resultMap="subscribeVOResultMap">
+		SELECT
+			a.`subscribeID`,
+			a.`groupID`,
+			a.`userID`,
+			a.`inviteCode`,
+			a.`inviteDate`,
+			a.`joinDate`,
+			a.`unsubscribeDate`,
+			b.`userName`
+		FROM `subscribe` a LEFT JOIN `user` b ON a.`userID` = b.`userID`
+		WHERE `groupID` = #{groupID}
+		ORDER BY IFNULL(a.`joinDate`, DATE_FORMAT('20000101', '%Y-%m-%d')) ASC, a.`inviteDate` ASC
+    </select>
+	<select id="selectOneGroupName" resultMap="subscribeVOResultMap">
+		SELECT b.`groupName`, b.`url`, a.`userID`
+		FROM `subscribe` a LEFT JOIN `group` b ON a.`groupID` = b.`groupID`
+		WHERE `inviteCode` = #{inviteCode}
+    </select>
+
+	<insert id="insertSubscribe_createInviteCode">
+		INSERT INTO `subscribe` (`groupID`, `inviteCode`)
+		VALUES (#{groupID}, UPPER(LEFT(REPLACE(UUID(),"-",""),12)))
+    </insert>
+
+	<update id="updateSubscribe_joinGroup">
+		UPDATE `subscribe`
+		SET `userID` = #{userID}, `joinDate` = CURRENT_TIMESTAMP
+		WHERE `inviteCode` = #{inviteCode}
+    </update>
+
+	<update id="updateSubscribe_outGroup">
+		UPDATE `subscribe`
+		SET `unsubscribeDate` = CURRENT_TIMESTAMP
+		WHERE `groupID` = #{groupID}, `userID` = #{userID}
+		ORDER BY `subscribeID` DESC LIMIT 1
+    </update>
+</mapper>

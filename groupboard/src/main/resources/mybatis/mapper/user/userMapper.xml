@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ppojin.groupboard.mappers.user.UserMapper">
+    <resultMap id="userVOResultMap" type="com.ppojin.groupboard.domain.UserVO">
+        <id     property="userID"       column="userID"/>
+        <result property="userPwd"      column="pwd"/>
+        <result property="userName"     column="userName"/>
+        <result property="userEmail"    column="email"/>
+        <result property="userJoinDate" column="joinDate"/>
+        <result property="userGravatar" column="gravatar"/>
+        <result property="userPhone"    column="phone"/>
+        <result property="userBirthDay" column="birthDay"/>
+    </resultMap>
+    <select id="login" resultMap="userVOResultMap">
+            SELECT * FROM `user` WHERE email = #{userEmail}
+    </select>
+    <insert id="register">
+        INSERT INTO `user`(`email`,`userName`,`pwd`,`birthday`,`phone`,`gravatar`)
+        VALUES(#{userEmail},#{userName},#{userPwd},#{userBirthday},#{userPhone},#{userGravatar})
+    </insert>
+    <insert id="registerNP">
+        INSERT INTO `user`(`email`,`userName`,`pwd`,`birthday`,`gravatar`)
+        VALUES(#{userEmail},#{userName},#{userPwd},#{userBirthday},#{userGravatar})
+    </insert>
+    <insert id="registerNB">
+        INSERT INTO `user`(`email`,`userName`,`pwd`,`phone`,`gravatar`)
+        VALUES(#{userEmail},#{userName},#{userPwd},#{userPhone},#{userGravatar})
+    </insert>
+    <insert id="registerNPNB">
+        INSERT INTO `user`(`email`,`userName`,`pwd`,`gravatar`)
+        VALUES(#{userEmail},#{userName},#{userPwd},#{userGravatar})
+    </insert>
+
+</mapper>

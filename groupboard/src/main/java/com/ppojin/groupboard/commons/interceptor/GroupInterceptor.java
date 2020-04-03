@@ -19,7 +19,7 @@ public class GroupInterceptor extends HandlerInterceptorAdapter {
     private static final String GROUP = "currentGroup";
     private static final Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
 
-    private static final String NAMESPACE = "com.hj.gboardex.mappers.group.GroupMapper";
+    private static final String NAMESPACE = "com.ppojin.groupboard.mappers.group.GroupMapper";
     private final SqlSession sqlSession;
 
     @Autowired

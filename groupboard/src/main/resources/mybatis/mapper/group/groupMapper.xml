@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ppojin.groupboard.mappers.group.GroupMapper">
+    <resultMap id="groupVOResultMap" type="com.ppojin.groupboard.domain.MainVO">
+        <id     property="groupID"          column="groupID"/>
+        <result property="groupManager"     column="manager"/>
+        <result property="groupSummary"     column="summary"/>
+        <result property="groupMainPic"     column="mainImage"/>
+        <result property="groupCreateDate"  column="createDate"/>
+        <result property="groupColor"       column="groupColor"/>
+        <result property="groupImgExt"      column="imgExt"/>
+    </resultMap>
+    <select id="listAll" resultMap="groupVOResultMap">
+        SELECT * FROM `group` a RIGHT JOIN (SELECT * FROM subscribe WHERE userID = #{userID}) b ON a.groupID = b.groupID
+    </select>
+    <select id="groupAuth" resultMap="groupVOResultMap">
+        SELECT * FROM `group` a RIGHT JOIN (SELECT * FROM subscribe WHERE userID = #{userID}) b ON a.groupID = b.groupID WHERE a.groupID = #{groupID}
+    </select>
+    <insert id="createGroup" useGeneratedKeys="true" keyProperty="groupID">
+        INSERT INTO `group`(`manager`,`groupName`,`summary`, `groupColor`, `imgExt`)
+        VALUES(#{userID},#{groupName},#{groupSummary}, #{groupColor}, #{groupImgExt});
+    </insert>
+    <insert id="createSubscribe">
+        INSERT INTO `subscribe`(`groupID`,`userID`,`inviteCode`,`joinDate`)
+        VALUES((SELECT `groupID` from `group` WHERE manager=${userID} ORDER BY groupID DESC LIMIT 1),
+            #{userID},left(replace(uuid(),"-",""),12),CURRENT_TIMESTAMP);
+    </insert>
+
+    <select id="subscribeCount" parameterType="int" resultType="int">
+        SELECT count(`userID`) FROM `subscribe` WHERE `groupID` = ${groupID} GROUP BY `groupID`;
+    </select>
+    <select id="confirmGroupManager" parameterType="int" resultType="int">
+        SELECT `manager` FROM `group` WHERE `groupID` = ${groupID};
+    </select>
+    <delete id="groupDelete" parameterType="int">
+        DELETE FROM `account_due` WHERE `groupID` = ${groupID};
+        DELETE FROM `article` WHERE `groupID` = ${groupID};
+--         DELETE FROM `article_like` WHERE `groupID` = ${groupID};
+        DELETE FROM `image` WHERE `groupID` = ${groupID};
+        DELETE FROM `image_reply` WHERE `groupID` = ${groupID};
+        DELETE FROM `reply` WHERE `groupID` = ${groupID};
+        DELETE FROM `schedule_attend` WHERE `groupID` = ${groupID};
+        DELETE FROM `subscribe` WHERE `groupID` = ${groupID};
+--         DELETE FROM `vote_item` WHERE `groupID` = ${groupID};
+--         DELETE FROM `vote_selected` WHERE `groupID` = ${groupID};
+        DELETE FROM `group` WHERE `groupID` = ${groupID};
+    </delete>
+</mapper>

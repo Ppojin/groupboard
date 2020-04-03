@@ -14,7 +14,7 @@ import java.sql.Date;
 @Repository
 public class UserDAOImpl implements UserDAO {
 
-    private static final String NAMESPACE = "com.hj.gboardex.mappers.user.UserMapper";
+    private static final String NAMESPACE = "com.ppojin.groupboard.mappers.user.UserMapper";
 
     private final SqlSession sqlSession;
     private Date dateNull;

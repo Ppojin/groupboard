@@ -1,4 +1,4 @@
-package com.ppojin.groupboard.service;
+package com.ppojin.groupboard.service.group;
 
 
 import com.ppojin.groupboard.domain.*;

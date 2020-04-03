@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ppojin.groupboard.mappers.service.VoteMapper">
+	<resultMap id="voteVOResultMap" type="com.ppojin.groupboard.domain.VoteVO">
+		<id     property="voteItemID"       column="voteItemID"/>
+		<result property="articleID"        column="articleID"/>
+		<result property="voteItemValue"    column="voteItemValue"/>
+		<result property="voteSelected"    column="voteSelected"/>
+
+		<result property="voteCount"        column="voteCount"/>
+		<result property="voteCountAll"     column="voteCountAll"/>
+	</resultMap>
+	<select id="listAllVoteItem" resultMap="voteVOResultMap">
+		SELECT
+		    a.`voteItemID`,
+		    a.`voteItemValue`,
+		    MAX(a.`articleID`) AS `articleID`,
+		    SUM(IF(b.`userID` = #{userID}, 1, 0)) AS `voteSelected`,
+		    COUNT(b.`voteItemID`) AS `voteCount`
+		FROM
+		     (SELECT * FROM `vote_item` WHERE `articleID`=#{articleID}) a
+		     LEFT JOIN
+		     `vote_selected` b
+		     ON a.`voteItemID` = b.`voteItemID`
+		GROUP BY a.`voteItemID`, a.`voteItemValue`
+    </select>
+	<select id="countAllVote" resultType="int">
+		SELECT COUNT(a.`articleID`) AS `voteCount`
+		FROM (SELECT * FROM `vote_selected` WHERE `articleID`=#{articleID}) a
+		GROUP BY `articleID`
+	</select>
+	<select id="confirmUser" resultType="boolean">
+		SELECT * FROM `vote_selected` WHERE `articleID` = ${articleID} AND `userID` = ${userID} LIMIT 1;
+	</select>
+
+	<insert id="insertVoteItem">
+		INSERT INTO `vote_item`(`articleID`, `voteItemValue`)
+		VALUES(#{articleID}, #{voteItemValue})
+	</insert>
+	<insert id="vote">
+		INSERT `vote_selected`(`articleID`, `voteItemID`, `userID`)
+		VALUES(#{articleID}, #{voteItemID}, #{userID})
+	</insert>
+</mapper>

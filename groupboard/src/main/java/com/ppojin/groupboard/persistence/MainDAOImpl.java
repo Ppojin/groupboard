@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public class MainDAOImpl implements MainDAO {
 
-    private static final String NAMESPACE = "com.hj.gboardex.mappers.group.GroupMapper";
+    private static final String NAMESPACE = "com.ppojin.groupboard.mappers.group.GroupMapper";
 
     private final SqlSession sqlSession;
 
@@ -34,7 +34,7 @@ public class MainDAOImpl implements MainDAO {
     @Override
     public String inviteCodeInput(SubscribeVO subscribeVO) throws Exception{
         System.out.println(subscribeVO.toString());
-        String NAMESPACE = "com.hj.gboardex.mappers.service.SubscribeMapper";
+        String NAMESPACE = "com.ppojin.groupboard.mappers.service.SubscribeMapper";
         SubscribeVO result = sqlSession.selectOne(NAMESPACE + ".selectOneGroupName", subscribeVO);
         if (result.getUserID() == 0){
             sqlSession.update(NAMESPACE + ".updateSubscribe_joinGroup", subscribeVO);

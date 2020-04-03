@@ -1,4 +1,4 @@
-package com.ppojin.groupboard.persistence;
+package com.ppojin.groupboard.persistence.group;
 
 import com.ppojin.groupboard.commons.util.UploadFileUtils;
 import com.ppojin.groupboard.domain.*;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @Repository
 public class GroupDAOImpl implements GroupDAO{
     private static final Logger logger = LoggerFactory.getLogger(GroupDAOImpl.class);
-    private static final String NAMESPACE = "com.hj.gboardex.mappers.service";
+    private static final String NAMESPACE = "com.ppojin.groupboard.mappers.service";
     private final SqlSession sqlSession;
 
     @Autowired
@@ -202,7 +202,7 @@ public class GroupDAOImpl implements GroupDAO{
 
     @Override
     public String removeGroup(int groupID, int userID) throws Exception{
-        String removeGroupNAMESPACE = "com.hj.gboardex.mappers.group.GroupMapper";
+        String removeGroupNAMESPACE = "com.ppojin.groupboard.mappers.group.GroupMapper";
         int subscribeCount = sqlSession.selectOne(removeGroupNAMESPACE + ".subscribeCount", groupID);
         if (subscribeCount == 1){
             int groupManager = sqlSession.selectOne(removeGroupNAMESPACE + ".confirmGroupManager", groupID);

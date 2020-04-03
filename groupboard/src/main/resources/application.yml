@@ -5,5 +5,6 @@ spring:
     password: 12345
     driver-class-name: com.mysql.cj.jdbc.Driver
 mybatis:
-  type-aliases-package: com.example.myproject.mapper
+  type-aliases-package: com.ppojin.groupboard.mapper
   mapper-locations: mybatis/mapper/**/*.xml
+#  mapper-locations: mybatis/mapper/groupMapper.xml

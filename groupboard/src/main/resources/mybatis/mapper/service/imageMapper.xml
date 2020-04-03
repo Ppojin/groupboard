@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ppojin.groupboard.mappers.service.ImageMapper">
+	<resultMap id="imageVOResultMap" type="com.ppojin.groupboard.domain.ImageVO">
+		<id     property="imageID" column="imageID"/>
+		<result property="groupID" column="groupID"/>
+		<result property="userID" column="userID"/>
+		<result property="articleID" column="articleID"/>
+		<result property="uploadDate" column="uploadDate"/>
+		<result property="filePath" column="filePath"/>
+	</resultMap>
+	<select id="listAllImage" resultMap="imageVOResultMap" parameterType="int">
+		SELECT * FROM `image` WHERE `articleID` = ${value}
+    </select>
+	<insert id="insertImage">
+		INSERT INTO `image` (`groupID`, `userID`, `articleID`, `filePath`)
+		VALUES (#{groupID}, #{userID}, #{articleID}, #{filePath})
+    </insert>
+</mapper>

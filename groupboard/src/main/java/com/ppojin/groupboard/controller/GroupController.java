@@ -1,7 +1,7 @@
 package com.ppojin.groupboard.controller;
 
 import com.ppojin.groupboard.domain.*;
-import com.ppojin.groupboard.service.GroupService;
+import com.ppojin.groupboard.service.group.GroupService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,6 @@ public class GroupController {
     public GroupController(GroupService groupService){this.groupService = groupService;};
 
     @RequestMapping(value="")
-    // listAllArticle, listAllReply
     public String gboardex(Model model, @SessionAttribute("currentGroup") MainVO mainVO) {
         int userID = mainVO.getUserID();
         int groupID = mainVO.getGroupID();
@@ -71,7 +70,7 @@ public class GroupController {
         }
         return "group/board/index";
     }
-    // =================================== ./board ===================================
+    // =================================== /group/:gid/board ===================================
 
     @PostMapping(value="like")
     public @ResponseBody

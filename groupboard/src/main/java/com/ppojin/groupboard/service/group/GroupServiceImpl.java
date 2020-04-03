@@ -1,7 +1,7 @@
-package com.ppojin.groupboard.service;
+package com.ppojin.groupboard.service.group;
 
 import com.ppojin.groupboard.domain.*;
-import com.ppojin.groupboard.persistence.GroupDAO;
+import com.ppojin.groupboard.persistence.group.GroupDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
