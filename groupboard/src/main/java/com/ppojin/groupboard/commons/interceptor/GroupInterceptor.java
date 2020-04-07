@@ -1,8 +1,8 @@
 package com.ppojin.groupboard.commons.interceptor;
 
-import com.ppojin.groupboard.domain.GroupDTO;
-import com.ppojin.groupboard.domain.MainVO;
-import com.ppojin.groupboard.domain.UserVO;
+import com.ppojin.groupboard.old.domain.group.GroupDTO;
+import com.ppojin.groupboard.old.domain.MainVO;
+import com.ppojin.groupboard.old.domain.UserVO;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

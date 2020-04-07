@@ -1,9 +1,9 @@
 package com.ppojin.groupboard.controller;
 
-import com.ppojin.groupboard.domain.MainVO;
-import com.ppojin.groupboard.domain.SubscribeVO;
-import com.ppojin.groupboard.domain.UserVO;
-import com.ppojin.groupboard.service.MainService;
+import com.ppojin.groupboard.old.domain.MainVO;
+import com.ppojin.groupboard.old.domain.group.SubscribeVO;
+import com.ppojin.groupboard.old.domain.UserVO;
+import com.ppojin.groupboard.old.service.MainService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

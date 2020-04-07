@@ -2,7 +2,7 @@
 --
 -- Host: docker.for.mac.localhost    Database: groupboard
 -- ------------------------------------------------------
--- Server version	8.0.19
+-- Server version	5.7.29
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,39 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `account_due`
---
-
-DROP TABLE IF EXISTS `account_due`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `account_due` (
-  `accountDuesID` int NOT NULL AUTO_INCREMENT,
-  `groupID` int NOT NULL,
-  `userID` int NOT NULL,
-  `articleID` int NOT NULL,
-  `accountDueAmount` double NOT NULL,
-  `accounttitle` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `uploadDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updateDate` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `paid` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`accountDuesID`),
-  KEY `articleID` (`articleID`),
-  KEY `groupID` (`groupID`),
-  KEY `userID` (`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `account_due`
---
-
-LOCK TABLES `account_due` WRITE;
-/*!40000 ALTER TABLE `account_due` DISABLE KEYS */;
-/*!40000 ALTER TABLE `account_due` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `article`
 --
 
@@ -56,32 +23,16 @@ DROP TABLE IF EXISTS `article`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `article` (
-  `articleUUID` varchar(36) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `articleID` int NOT NULL AUTO_INCREMENT,
-  `groupID` int NOT NULL,
-  `userID` int NOT NULL,
+  `articleID` int(11) NOT NULL AUTO_INCREMENT,
+  `userID` int(11) NOT NULL,
+  `groupID` int(11) NOT NULL,
   `uploadDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updateDate` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `articleContent` varchar(2000) COLLATE utf8mb4_general_ci NOT NULL,
-  `type` int NOT NULL,
-  `vote_multiple` tinyint(1) DEFAULT NULL,
-  `vote_count` int DEFAULT NULL,
-  `schedule_subject` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `schedule_place` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `schedule_startDate` date DEFAULT NULL,
-  `schedule_endDate` date DEFAULT NULL,
-  `place_thumbnail_UUID` varchar(36) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `place_coordinate_x` float DEFAULT NULL,
-  `place_coordinate_y` float DEFAULT NULL,
-  `place_address` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `accountSpent_amount` int DEFAULT NULL,
-  `accountDue_amount` int DEFAULT NULL,
-  `likeCount` int DEFAULT NULL,
-  PRIMARY KEY (`articleID`),
-  UNIQUE KEY `articleUUID` (`articleUUID`),
-  KEY `groupID` (`groupID`),
-  KEY `userID` (`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `articleContent` varchar(2000) NOT NULL,
+  `type` int(11) NOT NULL,
+  `likeCount` int(11) DEFAULT NULL,
+  PRIMARY KEY (`articleID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,10 +52,10 @@ DROP TABLE IF EXISTS `article_like`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `article_like` (
-  `articleID` int NOT NULL,
-  `userID` int NOT NULL,
-  `likeDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `likeDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `articleID` int(11) NOT NULL,
+  `userID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,19 +75,17 @@ DROP TABLE IF EXISTS `group`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `group` (
-  `groupID` int NOT NULL AUTO_INCREMENT,
-  `groupName` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `url` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `summary` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `groupID` int(11) NOT NULL AUTO_INCREMENT,
+  `userID` int(11) NOT NULL,
+  `groupName` varchar(50) NOT NULL,
+  `summary` varchar(200) DEFAULT NULL,
   `createDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `groupColor` int NOT NULL DEFAULT '0' COMMENT '0 = primary, 1 = secondary, 2=success, 3=danger, 4=warning, 5=info',
-  `manager` int NOT NULL,
-  `imgExt` varchar(12) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  PRIMARY KEY (`groupID`),
-  UNIQUE KEY `groupName` (`groupName`),
-  UNIQUE KEY `group_url_uindex` (`url`),
-  KEY `manager` (`manager`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `groupColor` int(11) NOT NULL DEFAULT '0' COMMENT '0 = primary, 1 = secondary, 2=success, 3=danger, 4=warning, 5=info',
+  `manager` int(11) NOT NULL,
+  `imgExt` varchar(12) DEFAULT NULL,
+  `groupUUID` varchar(36) NOT NULL,
+  PRIMARY KEY (`groupID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -156,17 +105,14 @@ DROP TABLE IF EXISTS `image`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `image` (
-  `imageID` int NOT NULL AUTO_INCREMENT,
-  `groupID` int NOT NULL,
-  `userID` int NOT NULL,
-  `articleID` int NOT NULL,
+  `imageID` int(11) NOT NULL AUTO_INCREMENT,
+  `groupID` int(11) NOT NULL,
+  `articleID` int(11) NOT NULL,
   `uploadDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `filePath` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  PRIMARY KEY (`imageID`),
-  KEY `articleID` (`articleID`),
-  KEY `groupID` (`groupID`),
-  KEY `userID` (`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `filePath` varchar(200) NOT NULL,
+  `album` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`imageID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -186,20 +132,14 @@ DROP TABLE IF EXISTS `image_reply`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `image_reply` (
-  `imageReplyID` int NOT NULL AUTO_INCREMENT,
-  `groupID` int NOT NULL,
-  `articleID` int DEFAULT NULL,
-  `userID` int NOT NULL,
-  `imageID` int NOT NULL,
+  `imageReplyID` int(11) NOT NULL AUTO_INCREMENT,
+  `imageID` int(11) NOT NULL,
+  `userID` int(11) NOT NULL,
   `uploadDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updateDate` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `imageRereplyID` int DEFAULT NULL,
-  `imageReplyContent` varchar(1000) COLLATE utf8mb4_general_ci NOT NULL,
-  PRIMARY KEY (`imageReplyID`),
-  KEY `groupID` (`groupID`),
-  KEY `imageID` (`imageID`),
-  KEY `userID` (`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `imageReplyContent` varchar(1000) NOT NULL,
+  PRIMARY KEY (`imageReplyID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -212,6 +152,37 @@ LOCK TABLES `image_reply` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `place`
+--
+
+DROP TABLE IF EXISTS `place`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `place` (
+  `placeID` int(11) NOT NULL AUTO_INCREMENT,
+  `articleID` int(11) NOT NULL,
+  `groupID` int(11) NOT NULL,
+  `uploadDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `thumbnailImage_UUID` varchar(36) DEFAULT NULL,
+  `coordinate_x` float DEFAULT NULL,
+  `coordinate_y` float DEFAULT NULL,
+  `address` float DEFAULT NULL,
+  `userID` int(11) DEFAULT NULL,
+  `groupMap` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`placeID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `place`
+--
+
+LOCK TABLES `place` WRITE;
+/*!40000 ALTER TABLE `place` DISABLE KEYS */;
+/*!40000 ALTER TABLE `place` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `reply`
 --
 
@@ -219,18 +190,16 @@ DROP TABLE IF EXISTS `reply`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reply` (
-  `groupID` int NOT NULL,
-  `articleID` int NOT NULL,
-  `replyID` int NOT NULL AUTO_INCREMENT,
-  `parentReplyID` int DEFAULT NULL,
-  `userID` int DEFAULT NULL,
+  `replyID` int(11) NOT NULL AUTO_INCREMENT,
+  `articleID` int(11) NOT NULL,
+  `userID` int(11) NOT NULL,
+  `groupID` int(11) NOT NULL,
+  `parentReplyID` int(11) DEFAULT NULL,
   `uploadDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updateDate` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `replyContent` varchar(1000) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  PRIMARY KEY (`replyID`),
-  KEY `articleID` (`articleID`),
-  KEY `groupID` (`groupID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `replyContent` varchar(1000) DEFAULT NULL,
+  PRIMARY KEY (`replyID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -243,31 +212,59 @@ LOCK TABLES `reply` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `schedule_attend`
+-- Table structure for table `schedule`
 --
 
-DROP TABLE IF EXISTS `schedule_attend`;
+DROP TABLE IF EXISTS `schedule`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `schedule_attend` (
-  `articleID` int NOT NULL,
-  `scheduleAttendID` int NOT NULL AUTO_INCREMENT,
-  `userID` int NOT NULL,
-  `attend` tinyint(1) NOT NULL,
-  `uploadDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`scheduleAttendID`),
-  KEY `articleID` (`articleID`),
-  KEY `userID` (`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `schedule` (
+  `ScheduleID` int(11) NOT NULL AUTO_INCREMENT,
+  `articleID` int(11) NOT NULL,
+  `groupID2` int(11) NOT NULL,
+  `articleUUID` varchar(36) DEFAULT NULL,
+  `userid` int(11) DEFAULT NULL,
+  `subject` varchar(200) DEFAULT NULL,
+  `startDate` date DEFAULT NULL,
+  `endDate` date DEFAULT NULL,
+  `groupSchedule` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`ScheduleID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `schedule_attend`
+-- Dumping data for table `schedule`
 --
 
-LOCK TABLES `schedule_attend` WRITE;
-/*!40000 ALTER TABLE `schedule_attend` DISABLE KEYS */;
-/*!40000 ALTER TABLE `schedule_attend` ENABLE KEYS */;
+LOCK TABLES `schedule` WRITE;
+/*!40000 ALTER TABLE `schedule` DISABLE KEYS */;
+/*!40000 ALTER TABLE `schedule` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `schedule_attendpersone`
+--
+
+DROP TABLE IF EXISTS `schedule_attendpersone`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `schedule_attendpersone` (
+  `scheduleAttendID` int(11) NOT NULL AUTO_INCREMENT,
+  `ScheduleID` int(11) NOT NULL,
+  `userID` int(11) NOT NULL,
+  `attend` tinyint(1) NOT NULL,
+  `uploadDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`scheduleAttendID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `schedule_attendpersone`
+--
+
+LOCK TABLES `schedule_attendpersone` WRITE;
+/*!40000 ALTER TABLE `schedule_attendpersone` DISABLE KEYS */;
+/*!40000 ALTER TABLE `schedule_attendpersone` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -278,19 +275,15 @@ DROP TABLE IF EXISTS `subscribe`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `subscribe` (
-  `subscribeID` int NOT NULL AUTO_INCREMENT,
-  `groupID` int NOT NULL,
-  `userID` int DEFAULT NULL,
+  `subscribeID` int(11) NOT NULL AUTO_INCREMENT,
+  `groupID` int(11) NOT NULL,
+  `userID` int(11) NOT NULL,
   `inviteDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `inviteCode` varchar(12) COLLATE utf8mb4_general_ci NOT NULL,
+  `inviteCode` varchar(12) NOT NULL,
   `joinDate` datetime DEFAULT NULL,
   `unsubscribeDate` datetime DEFAULT NULL,
-  PRIMARY KEY (`subscribeID`),
-  UNIQUE KEY `inviteCode` (`inviteCode`),
-  KEY `groupID` (`groupID`),
-  KEY `inviteCode_2` (`inviteCode`),
-  KEY `userID` (`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`subscribeID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -310,18 +303,16 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
-  `userID` int NOT NULL AUTO_INCREMENT,
-  `email` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-  `userName` varchar(12) COLLATE utf8mb4_general_ci NOT NULL,
-  `pwd` varchar(60) COLLATE utf8mb4_general_ci NOT NULL,
+  `userID` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(200) NOT NULL,
+  `userName` varchar(12) NOT NULL,
+  `pwd` varchar(60) NOT NULL,
   `birthday` date DEFAULT NULL,
-  `phone` varchar(11) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `phone` varchar(11) DEFAULT NULL,
   `joinDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `gravatar` varchar(200) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  PRIMARY KEY (`userID`),
-  UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `phone` (`phone`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `userImageUUID` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`userID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -334,6 +325,32 @@ LOCK TABLES `user` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `vote`
+--
+
+DROP TABLE IF EXISTS `vote`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vote` (
+  `voteID` int(11) NOT NULL AUTO_INCREMENT,
+  `articleID` int(11) NOT NULL,
+  `multiple` tinyint(1) NOT NULL,
+  `count` int(11) DEFAULT NULL,
+  `groupVote` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`voteID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `vote`
+--
+
+LOCK TABLES `vote` WRITE;
+/*!40000 ALTER TABLE `vote` DISABLE KEYS */;
+/*!40000 ALTER TABLE `vote` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `vote_item`
 --
 
@@ -341,12 +358,12 @@ DROP TABLE IF EXISTS `vote_item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `vote_item` (
-  `articleID` int NOT NULL,
-  `voteItemID` int NOT NULL AUTO_INCREMENT,
-  `voteItemValue` varchar(45) COLLATE utf8mb4_general_ci NOT NULL,
-  PRIMARY KEY (`voteItemID`),
-  KEY `articleID` (`articleID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `voteItemID` int(11) NOT NULL AUTO_INCREMENT,
+  `voteID` int(11) NOT NULL,
+  `count` int(11) DEFAULT NULL,
+  `voteItemValue` varchar(45) NOT NULL,
+  PRIMARY KEY (`voteItemID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -366,16 +383,11 @@ DROP TABLE IF EXISTS `vote_selected`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `vote_selected` (
-  `articleID` int NOT NULL,
-  `voteItemID` int NOT NULL,
-  `voteSelectedID` int NOT NULL AUTO_INCREMENT,
-  `userID` int NOT NULL,
+  `voteItemID` int(11) NOT NULL AUTO_INCREMENT,
+  `userID` int(11) NOT NULL,
   `uploadDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`voteSelectedID`),
-  KEY `articleID` (`articleID`),
-  KEY `userID` (`userID`),
-  KEY `voteContentID` (`voteItemID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`voteItemID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -396,4 +408,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-02 19:17:42
+-- Dump completed on 2020-04-03 21:01:37
